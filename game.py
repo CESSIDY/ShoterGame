@@ -1,5 +1,5 @@
 import pygame
-from Settings import ScreenWidth, ScreenHeight, font, bg, bulletSound, hitSound, win, clock
+from Settings import ScreenWidth, playZoneYCoordinates, ScreenHeight, font, bg, bulletSound, hitSound, win, clock
 from Player import Player
 from Projectlite import Projectile
 from bin.Enemys.Generator import GenerateEnemys
@@ -15,7 +15,7 @@ def redrawGameWindow():
             enemy.drawBullets(win)
     text = font.render("Score: " + str(man.score), 1, (0, 0, 0))  # Arguments are: text, anti-aliasing, color
     health = font.render("{}/4".format(man.health), 1, (0, 255, 0))  # Arguments are: text, anti-aliasing, color
-    win.blit(text, (850, 10))
+    win.blit(text, (ScreenWidth - 150, 10))
     win.blit(health, (100, 10))
     man.drawBullets(win)
     pygame.display.update()
@@ -29,7 +29,7 @@ def isWindowClose():
 
 
 # mainloop
-man = Player(500, 550, 64, 64)
+man = Player(ScreenWidth//2, playZoneYCoordinates, 64, 64)
 enemys = []
 run = True
 while run:

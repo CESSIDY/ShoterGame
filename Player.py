@@ -1,5 +1,5 @@
 import pygame
-from Settings import ScreenHeight, ScreenWidth, bulletSound
+from Settings import ScreenHeight, ScreenWidth, bulletSound, playZoneYCoordinates
 from Projectlite import Projectile
 
 
@@ -34,10 +34,10 @@ class Player(object):
             self.x + 20, self.y, 28, 60)  # The elements in the hitbox are (top left x, top left y, width, height)
         self.score = 0
         self.health = 4
-        self.saveZoneYCoordinates = 400
-        self.saveZoneXCoordinates = 500
-        self.playZoneYCoordinates = 550
-        self.playZoneXCoordinates = 500
+        self.saveZoneYCoordinates = playZoneYCoordinates-100
+        self.saveZoneXCoordinates = ScreenWidth//2
+        self.playZoneYCoordinates = playZoneYCoordinates
+        self.playZoneXCoordinates = ScreenWidth//2
 
     def draw(self, win):
         if self.walkCount + 1 >= 27:
