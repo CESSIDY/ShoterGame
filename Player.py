@@ -16,11 +16,12 @@ class Player(object):
                 pygame.image.load('resources/images/L9.png')]
     char = pygame.image.load('resources/images/standing.png')
 
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, win):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.win = win
         self.vel = 5
         self.isJump = False
         self.jumpCount = 10
@@ -34,27 +35,32 @@ class Player(object):
             self.x + 20, self.y, 28, 60)  # The elements in the hitbox are (top left x, top left y, width, height)
         self.score = 0
         self.health = 4
-        self.saveZoneYCoordinates = playZoneYCoordinates-100
-        self.saveZoneXCoordinates = ScreenWidth//2
+        self.saveZoneYCoordinates = playZoneYCoordinates - 100
+        self.saveZoneXCoordinates = ScreenWidth // 2
         self.playZoneYCoordinates = playZoneYCoordinates
-        self.playZoneXCoordinates = ScreenWidth//2
+        self.playZoneXCoordinates = ScreenWidth // 2
 
-    def draw(self, win):
+    def action(self, keys, enemys):
+        self.move(keys)
+        self.shot(keys, enemys)
+
+    def draw(self):
+        self.drawBullets()
         if self.walkCount + 1 >= 27:
             self.walkCount = 0
 
         if not self.standing:
             if self.left:
-                win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
+                self.win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
                 self.walkCount += 1
             elif self.right:
-                win.blit(self.walkRight[self.walkCount // 3], (self.x, self.y))
+                self.win.blit(self.walkRight[self.walkCount // 3], (self.x, self.y))
                 self.walkCount += 1
         else:
             if self.right:
-                win.blit(self.walkRight[0], (self.x, self.y))
+                self.win.blit(self.walkRight[0], (self.x, self.y))
             else:
-                win.blit(self.walkLeft[0], (self.x, self.y))
+                self.win.blit(self.walkLeft[0], (self.x, self.y))
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
 
     def move(self, keys):
@@ -154,6 +160,6 @@ class Player(object):
                     Projectile(round(self.x + self.width // 2), round(self.y + self.height // 2), 6, (0, 0, 0), facing))
             self.shootLoop = 1
 
-    def drawBullets(self, win):
+    def drawBullets(self):
         for bullet in self.bullets:
-            bullet.draw(win)
+            bullet.draw(self.win)

@@ -1,23 +1,32 @@
+import random
+
 import pygame
 from Settings import ScreenWidth, playZoneYCoordinates, ScreenHeight, font, bg, bulletSound, hitSound, win, clock
 from Player import Player
 from Projectlite import Projectile
 from bin.Enemys.Generator import GenerateEnemys
+from bin.Boxes.Generator import GenerateBoxes
 from bin.Enemys.BaseEnemys import BaseShotEnemy
 
 
 def redrawGameWindow():
+    # Draw BackGround
     win.blit(bg, (0, 0))
-    man.draw(win)
-    for enemy in enemys:
-        enemy.draw(win)
-        if isinstance(enemy, BaseShotEnemy):
-            enemy.drawBullets(win)
-    text = font.render("Score: " + str(man.score), 1, (0, 0, 0))  # Arguments are: text, anti-aliasing, color
-    health = font.render("{}/4".format(man.health), 1, (0, 255, 0))  # Arguments are: text, anti-aliasing, color
+    # Draw Staff
+    enemys_generator.draw()
+    box_generator.draw()
+    player.draw()
+    # Draw Health point
+    health_width = 50
+    for i in range(player.health):
+        win.blit(pygame.transform.scale(pygame.image.load('resources/images/health.png'), (20, 20)),
+                 (health_width, 10))
+        health_width += 20
+    # Draw Score Bar
+    text = font.render("Score: " + str(player.score), 1, (0, 0, 0))  # Arguments are: text, anti-aliasing, color
     win.blit(text, (ScreenWidth - 150, 10))
-    win.blit(health, (100, 10))
-    man.drawBullets(win)
+    # Draw Bullets
+    # Update display
     pygame.display.update()
 
 
@@ -29,18 +38,21 @@ def isWindowClose():
 
 
 # mainloop
-man = Player(ScreenWidth//2, playZoneYCoordinates, 64, 64)
-enemys = []
+player = Player(ScreenWidth//2, playZoneYCoordinates, 64, 64, win)
+box_generator = GenerateBoxes(player, win)
+enemys_generator = GenerateEnemys(player, win)
 run = True
 while run:
-    enemys = GenerateEnemys().generate(enemys, shot=True)
     clock.tick(30)
-    run = isWindowClose()
     keys = pygame.key.get_pressed()
-    man.move(keys)
-    man.shot(keys, enemys)
-    for enemy in enemys:
-        enemy.fight(man, win)
+    run = isWindowClose()
+    #Enemys
+    enemys_generator.action()
+    #Boxes
+    box_generator.action()
+    #Player
+    player.action(keys, enemys_generator.enemys)
+    # Draw all staff
     redrawGameWindow()
 
 pygame.quit()
