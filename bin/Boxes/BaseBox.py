@@ -21,7 +21,7 @@ class BaseBox(ABC):
     def draw(self, win):
         win.blit(self.box, (self.x, self.y))
         self.hitbox = (self.x - 5, self.y - 5, 40, 40)
-        pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # Draws the hit box around the enemy
+        #pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # Draws the hit box around the enemy
 
     @abstractmethod
     def move(self):

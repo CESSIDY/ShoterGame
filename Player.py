@@ -1,6 +1,7 @@
 import pygame
 from Settings import ScreenHeight, ScreenWidth, bulletSound, playZoneYCoordinates
 from Projectlite import Projectile
+from datetime import timedelta, datetime
 
 
 class Player(object):
@@ -15,6 +16,9 @@ class Player(object):
                 pygame.image.load('resources/images/L7.png'), pygame.image.load('resources/images/L8.png'),
                 pygame.image.load('resources/images/L9.png')]
     char = pygame.image.load('resources/images/standing.png')
+    shield_width = 50
+    shield_height = 50
+    shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'), (shield_width, shield_height))
 
     def __init__(self, x, y, width, height, win):
         self.x = x
@@ -35,6 +39,7 @@ class Player(object):
             self.x + 20, self.y, 28, 60)  # The elements in the hitbox are (top left x, top left y, width, height)
         self.score = 0
         self.health = 4
+        self.restart_date_time = datetime.now() + timedelta(seconds=2)
         self.saveZoneYCoordinates = playZoneYCoordinates - 100
         self.saveZoneXCoordinates = ScreenWidth // 2
         self.playZoneYCoordinates = playZoneYCoordinates
@@ -48,7 +53,10 @@ class Player(object):
         self.drawBullets()
         if self.walkCount + 1 >= 27:
             self.walkCount = 0
-
+        if self.restart_date_time >= datetime.now():
+            shield_x = self.x + ((self.width - self.shield_width) / 2)
+            shield_y = self.y + ((self.height - self.shield_height) / 2)
+            self.win.blit(self.shield, (shield_x, shield_y))
         if not self.standing:
             if self.left:
                 self.win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
@@ -66,7 +74,6 @@ class Player(object):
     def move(self, keys):
         if keys[pygame.K_LEFT] and self.x > self.vel:
             if self.y == self.saveZoneYCoordinates:
-                print("GO PLAY")
                 self.y = self.playZoneYCoordinates
             self.x -= int(self.vel)
             self.left = True
@@ -74,7 +81,6 @@ class Player(object):
             self.standing = False
         elif keys[pygame.K_RIGHT] and self.x + self.width + self.vel < ScreenWidth:
             if self.y == self.saveZoneYCoordinates:
-                print("GO PLAY")
                 self.y = self.playZoneYCoordinates
             self.x += int(self.vel)
             self.left = False
@@ -86,7 +92,6 @@ class Player(object):
         if not self.isJump:
             if keys[pygame.K_UP]:
                 if self.y == self.saveZoneYCoordinates:
-                    print("GO PLAY")
                     self.y = self.playZoneYCoordinates
                 self.isJump = True
                 self.right = False
@@ -104,23 +109,26 @@ class Player(object):
                 self.jumpCount = 10
 
     def hit(self):
-        self.jumpCount = 10
-        self.isJump = False
-        self.x = self.saveZoneXCoordinates
-        self.y = self.saveZoneYCoordinates
-        self.walkCount = 0
-        self.health -= 1
-        self.score -= 2
-        if self.health <= 0:
-            pygame.quit()
-        i = 0
-        while i < 300:
-            pygame.time.delay(10)
-            i += 1
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    i = 301
-                    pygame.quit()
+        print("RESTART TIME {}:".format(self.restart_date_time))
+        if self.restart_date_time <= datetime.now():
+            self.jumpCount = 10
+            self.isJump = False
+            self.x = self.playZoneXCoordinates
+            self.y = self.playZoneYCoordinates
+            self.walkCount = 0
+            self.health -= 1
+            self.restart_date_time = datetime.now() + timedelta(seconds=5)
+            self.score -= 2
+            if self.health <= 0:
+                pygame.quit()
+            # i = 0
+            # while i < 300:
+            #     pygame.time.delay(10)
+            #     i += 1
+            #     for event in pygame.event.get():
+            #         if event.type == pygame.QUIT:
+            #             i = 301
+            #             pygame.quit()
 
     def shot(self, keys, enemys):
         if self.shootLoop > 0:
