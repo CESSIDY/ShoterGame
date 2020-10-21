@@ -47,3 +47,6 @@ class Cowboy(BaseShotEnemy):
 
     def drawBullets(self, win):
         super(Cowboy, self).drawBullets(win)
+
+    def die(self):  # This will display when the enemy is hit
+        super(Cowboy, self).die()

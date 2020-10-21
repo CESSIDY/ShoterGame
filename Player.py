@@ -109,7 +109,6 @@ class Player(object):
                 self.jumpCount = 10
 
     def hit(self):
-        print("RESTART TIME {}:".format(self.restart_date_time))
         if self.restart_date_time <= datetime.now():
             self.jumpCount = 10
             self.isJump = False

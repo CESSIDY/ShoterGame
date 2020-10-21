@@ -35,3 +35,6 @@ class Goblin(BaseFightEnemy):
 
     def hit(self):  # This will display when the enemy is hit
         return super(Goblin, self).hit()
+    
+    def die(self):  # This will display when the enemy is hit
+        super(Goblin, self).die()

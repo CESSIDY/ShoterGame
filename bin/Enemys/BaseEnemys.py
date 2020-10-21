@@ -71,6 +71,12 @@ class BaseFightEnemy(ABC):
             self.visible = False
             return False
 
+    @abstractmethod
+    def die(self):  # This will display when the enemy is hit
+        hitSound.play()
+        self.health = 0
+        self.visible = False
+
 
 class BaseShotEnemy(ABC):
     @abstractmethod
@@ -164,6 +170,12 @@ class BaseShotEnemy(ABC):
         else:
             self.visible = False
             return False
+
+    @abstractmethod
+    def die(self):  # This will display when the enemy is hit
+        hitSound.play()
+        self.health = 0
+        self.visible = False
 
     def drawBullets(self, win):
         for bullet in self.bullets:
