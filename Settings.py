@@ -4,6 +4,7 @@ pygame.init()
 ScreenWidth = 1100
 ScreenHeight = 700
 playZoneYCoordinates = 550
+flags = pygame.OPENGL | pygame.FULLSCREEN
 
 pygame.display.set_caption("First Game")
 bg = pygame.image.load('resources/images/bg.jpg')

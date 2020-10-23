@@ -1,13 +1,13 @@
 from .BaseEnemys import BaseShotEnemy
 import pygame
 import random
-from Settings import hitSound, ScreenWidth
+#from Settings import hitSound, ScreenWidth
 from Projectlite import Projectile
 
 
 class Cowboy(BaseShotEnemy):
-    def __init__(self, x, y, width, height):
-        super(Cowboy, self).__init__(x, y, width, height)
+    def __init__(self, x, y, width, height, settings):
+        super(Cowboy, self).__init__(x, y, width, height, settings)
         self.walkRight = [pygame.transform.scale(pygame.image.load('resources/images/cowboy/Run_R_0.png'), (50, 61)),
                           pygame.transform.scale(pygame.image.load('resources/images/cowboy/Run_R_1.png'), (50, 61)),
                           pygame.transform.scale(pygame.image.load('resources/images/cowboy/Run_R_2.png'), (50, 61)),

@@ -1,13 +1,14 @@
 import random
 from abc import ABC, abstractmethod
 import pygame
-from Settings import hitSound, ScreenWidth
+#from Settings import hitSound, ScreenWidth
 from Projectlite import Projectile
 
 
 class BaseFightEnemy(ABC):
     @abstractmethod
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, settings):
+        self.settings = settings
         self.x = x
         self.y = y
         self.width = width
@@ -18,7 +19,7 @@ class BaseFightEnemy(ABC):
         self.hitbox = (self.x + 17, self.y + 2, 31, 57)
         self.visible = True
         # True = from left, False = from right
-        if x <= ScreenWidth//2:
+        if x <= self.settings['ScreenWidth']//2:
             self.direction = True
         else:
             self.direction = False
@@ -42,7 +43,7 @@ class BaseFightEnemy(ABC):
     @abstractmethod
     def move(self):
         if self.direction:  # If we are moving right
-            if self.x >= ScreenWidth:  # If we have not reached the furthest right point on our path.
+            if self.x >= self.settings['ScreenWidth']:  # If we have not reached the furthest right point on our path.
                 self.direction = False
                 self.walkCount = 0
             else:
@@ -63,7 +64,7 @@ class BaseFightEnemy(ABC):
 
     @abstractmethod
     def hit(self):  # This will display when the enemy is hit
-        hitSound.play()
+        self.settings['hitSound'].play()
         if self.health > 0:
             self.health -= 1
             return True
@@ -73,14 +74,15 @@ class BaseFightEnemy(ABC):
 
     @abstractmethod
     def die(self):  # This will display when the enemy is hit
-        hitSound.play()
+        self.settings['hitSound'].play()
         self.health = 0
         self.visible = False
 
 
 class BaseShotEnemy(ABC):
     @abstractmethod
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, settings):
+        self.settings = settings
         self.x = x
         self.y = y
         self.width = width
@@ -92,7 +94,7 @@ class BaseShotEnemy(ABC):
         self.health = 10
         self.visible = True
         # True = from left, False = from right
-        if x <= ScreenWidth//2:
+        if x <= self.settings['ScreenWidth']//2:
             self.direction = True
         else:
             self.direction = False
@@ -117,7 +119,7 @@ class BaseShotEnemy(ABC):
     @abstractmethod
     def move(self):
         if self.direction:  # If we are moving right
-            if self.x >= ScreenWidth:  # If we have not reached the furthest right point on our path.
+            if self.x >= self.settings['ScreenWidth']:  # If we have not reached the furthest right point on our path.
                 self.direction = False
                 self.walkCount = 0
             else:
@@ -145,7 +147,7 @@ class BaseShotEnemy(ABC):
                         self.bullets.pop(self.bullets.index(bullet))  # removes bullet from bullet list
                     except:
                         pass
-            if ScreenWidth > bullet.x > 0:
+            if self.settings['ScreenWidth'] > bullet.x > 0:
                 bullet.x += bullet.vel
             else:
                 try:
@@ -163,7 +165,7 @@ class BaseShotEnemy(ABC):
 
     @abstractmethod
     def hit(self):  # This will display when the enemy is hit
-        hitSound.play()
+        self.settings['hitSound'].play()
         if self.health > 0:
             self.health -= 1
             return True
@@ -173,7 +175,7 @@ class BaseShotEnemy(ABC):
 
     @abstractmethod
     def die(self):  # This will display when the enemy is hit
-        hitSound.play()
+        self.settings['hitSound'].play()
         self.health = 0
         self.visible = False
 

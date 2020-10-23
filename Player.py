@@ -1,5 +1,5 @@
 import pygame
-from Settings import ScreenHeight, ScreenWidth, bulletSound, playZoneYCoordinates
+# from Settings import ScreenHeight, ScreenWidth, bulletSound, playZoneYCoordinates
 from Projectlite import Projectile
 from datetime import timedelta, datetime
 
@@ -18,9 +18,10 @@ class Player(object):
     char = pygame.image.load('resources/images/standing.png')
     shield_width = 50
     shield_height = 50
-    shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'), (shield_width, shield_height))
+    shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'),
+                                    (shield_width, shield_height))
 
-    def __init__(self, x, y, width, height, win):
+    def __init__(self, x, y, width, height, win, settings):
         self.x = x
         self.y = y
         self.width = width
@@ -34,16 +35,16 @@ class Player(object):
         self.walkCount = 0
         self.standing = True
         self.shootLoop = 0
+        self.max_bullets = 5
         self.bullets = []
         self.hitbox = (
             self.x + 20, self.y, 28, 60)  # The elements in the hitbox are (top left x, top left y, width, height)
         self.score = 0
         self.health = 4
+        self.settings = settings
         self.restart_date_time = datetime.now() + timedelta(seconds=2)
-        self.saveZoneYCoordinates = playZoneYCoordinates - 100
-        self.saveZoneXCoordinates = ScreenWidth // 2
-        self.playZoneYCoordinates = playZoneYCoordinates
-        self.playZoneXCoordinates = ScreenWidth // 2
+        self.saveZoneXCoordinates = settings['ScreenWidth'] // 2
+        self.playZoneXCoordinates = settings['ScreenWidth'] // 2
 
     def action(self, keys, enemys):
         self.move(keys)
@@ -73,15 +74,11 @@ class Player(object):
 
     def move(self, keys):
         if keys[pygame.K_LEFT] and self.x > self.vel:
-            if self.y == self.saveZoneYCoordinates:
-                self.y = self.playZoneYCoordinates
             self.x -= int(self.vel)
             self.left = True
             self.right = False
             self.standing = False
-        elif keys[pygame.K_RIGHT] and self.x + self.width + self.vel < ScreenWidth:
-            if self.y == self.saveZoneYCoordinates:
-                self.y = self.playZoneYCoordinates
+        elif keys[pygame.K_RIGHT] and self.x + self.width + self.vel < self.settings['ScreenWidth']:
             self.x += int(self.vel)
             self.left = False
             self.right = True
@@ -91,8 +88,6 @@ class Player(object):
             self.walkCount = 0
         if not self.isJump:
             if keys[pygame.K_UP]:
-                if self.y == self.saveZoneYCoordinates:
-                    self.y = self.playZoneYCoordinates
                 self.isJump = True
                 self.right = False
                 self.left = False
@@ -113,21 +108,13 @@ class Player(object):
             self.jumpCount = 10
             self.isJump = False
             self.x = self.playZoneXCoordinates
-            self.y = self.playZoneYCoordinates
+            self.y = self.settings['playZoneYCoordinates']
             self.walkCount = 0
             self.health -= 1
             self.restart_date_time = datetime.now() + timedelta(seconds=5)
             self.score -= 2
             if self.health <= 0:
                 pygame.quit()
-            # i = 0
-            # while i < 300:
-            #     pygame.time.delay(10)
-            #     i += 1
-            #     for event in pygame.event.get():
-            #         if event.type == pygame.QUIT:
-            #             i = 301
-            #             pygame.quit()
 
     def shot(self, keys, enemys):
         if self.shootLoop > 0:
@@ -148,7 +135,7 @@ class Player(object):
                             self.bullets.pop(self.bullets.index(bullet))  # removes bullet from bullet list
                         except:
                             pass
-            if ScreenWidth > bullet.x > 0:
+            if self.settings['ScreenWidth'] > bullet.x > 0:
                 bullet.x += bullet.vel
             else:
                 try:
@@ -157,12 +144,12 @@ class Player(object):
                     pass
 
         if keys[pygame.K_SPACE] and self.shootLoop == 0:
-            bulletSound.play()
+            self.settings['bulletSound'].play()
             if self.left:
                 facing = -1
             else:
                 facing = 1
-            if len(self.bullets) < 5:
+            if len(self.bullets) < self.max_bullets:
                 self.bullets.append(
                     Projectile(round(self.x + self.width // 2), round(self.y + self.height // 2), 6, (0, 0, 0), facing))
             self.shootLoop = 1

@@ -2,14 +2,13 @@ import os
 import pygame
 import random
 from .BaseEven import BaseEven, BaseAttachedEven
-from .BaseEven import BaseEven
-from Settings import hitSound, ScreenWidth, ScreenHeight, playZoneYCoordinates
 from Projectlite import Projectile
 
 
 class AirStrike(BaseAttachedEven):
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, settings):
         super(AirStrike, self).__init__()
+        self.settings = settings
         self.x = x
         self.y = y
         self.width = width
@@ -39,7 +38,7 @@ class AirStrike(BaseAttachedEven):
         #pygame.draw.rect(win, (255, 0, 0), self.hitbox, 2)  # Draws the hit box around the enemy
 
     def move(self, enemys, player):
-        if playZoneYCoordinates > self.y:
+        if self.settings['playZoneYCoordinates'] > self.y:
             self.y += self.vel
         else:
             for enemy in enemys:
@@ -54,12 +53,12 @@ class AirStrike(BaseAttachedEven):
             self.visible = False
 
     def get_event(self):
-        return Explosion(self.x, self.y)
+        return Explosion(self.x, self.y, self.settings)
 
 
 
 class Explosion(BaseEven):
-    def __init__(self, x, y):
+    def __init__(self, x, y, settings):
         super(Explosion, self).__init__()
         path = 'resources/images/explosion/'
         self.x = x

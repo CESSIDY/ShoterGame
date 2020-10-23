@@ -6,7 +6,8 @@ from Settings import ScreenWidth, playZoneYCoordinates, ScreenHeight
 
 
 class GenerateEvents(object):
-    def __init__(self, player, win):
+    def __init__(self, player, win, settings):
+        self.settings = settings
         self.events = []
         self.player = player
         self.win = win

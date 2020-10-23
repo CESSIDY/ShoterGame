@@ -1,7 +1,7 @@
 from .BaseBox import BaseEventBox
 import pygame
 import random
-from Settings import hitSound, ScreenWidth, ScreenHeight
+#from Settings import hitSound, ScreenWidth, ScreenHeight
 from Projectlite import Projectile
 from datetime import timedelta, datetime
 
@@ -9,8 +9,8 @@ from ..Events.AirStrike import AirStrike
 
 
 class AirStrileBox(BaseEventBox):
-    def __init__(self, x, y, width, height):
-        super(AirStrileBox, self).__init__(x, y, width, height)
+    def __init__(self, x, y, width, height, settings):
+        super(AirStrileBox, self).__init__(x, y, width, height, settings)
         self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/air_strike_box.png'), (30, 30))
 
     def draw(self, win):
@@ -25,7 +25,7 @@ class AirStrileBox(BaseEventBox):
     def get_event(self):
         events = []
         for i in range(random.randrange(1, 21)):
-            what_y = random.randint(0, ScreenWidth - 30)
+            what_y = random.randint(0, self.settings['ScreenWidth'] - 30)
             what_x = random.randint(-200, 0)
-            events.append(AirStrike(what_y, what_x, 30, 30))
+            events.append(AirStrike(what_y, what_x, 30, 30, self.settings))
         return events

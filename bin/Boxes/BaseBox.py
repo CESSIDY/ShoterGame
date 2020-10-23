@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
 import random
 import pygame
-from Settings import hitSound, ScreenWidth, ScreenHeight
+#from Settings import hitSound, ScreenWidth, ScreenHeight
 from Projectlite import Projectile
 
 
 class BaseBox(ABC):
     @abstractmethod
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, settings):
+        self.settings = settings
         self.x = x
         self.y = y
         self.width = width
@@ -25,7 +26,7 @@ class BaseBox(ABC):
 
     @abstractmethod
     def move(self):
-        if ScreenHeight > self.y:
+        if self.settings['ScreenHeight'] > self.y:
             self.y += self.vel
         else:
             self.visible = False
@@ -42,7 +43,8 @@ class BaseBox(ABC):
 
 class BaseEventBox(ABC):
     @abstractmethod
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, settings):
+        self.settings = settings
         self.x = x
         self.y = y
         self.width = width
@@ -51,6 +53,7 @@ class BaseEventBox(ABC):
         self.vel = 3
         self.hitbox = (self.x - 5, self.y - 5, 40, 40)
         self.visible = True
+        self.take_box = False
 
     @abstractmethod
     def draw(self, win):
@@ -60,7 +63,7 @@ class BaseEventBox(ABC):
 
     @abstractmethod
     def move(self):
-        if ScreenHeight > self.y:
+        if self.settings['ScreenHeight'] > self.y:
             self.y += self.vel
         else:
             self.visible = False
@@ -71,6 +74,7 @@ class BaseEventBox(ABC):
             if player.hitbox[0] + player.hitbox[2] > self.hitbox[0] and player.hitbox[0] < self.hitbox[0] + self.hitbox[
                 2]:
                 self.visible = False
+                self.take_box = True
 
     @abstractmethod
     def get_event(self):

@@ -1,11 +1,11 @@
 from .BaseEnemys import BaseFightEnemy
 import pygame
-from Settings import hitSound, ScreenWidth
+#from Settings import hitSound, ScreenWidth
 
 
 class Goblin(BaseFightEnemy):
-    def __init__(self, x, y, width, height):
-        super(Goblin, self).__init__(x, y, width, height)
+    def __init__(self, x, y, width, height, settings):
+        super(Goblin, self).__init__(x, y, width, height, settings)
         self.walkRight = [pygame.image.load('resources/images/R1E.png'), pygame.image.load('resources/images/R2E.png'),
                           pygame.image.load('resources/images/R3E.png'),
                           pygame.image.load('resources/images/R4E.png'), pygame.image.load('resources/images/R5E.png'),
