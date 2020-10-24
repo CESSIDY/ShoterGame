@@ -114,6 +114,7 @@ class Player(object):
             self.restart_date_time = datetime.now() + timedelta(seconds=5)
             self.score -= 2
             if self.health <= 0:
+                print(self.score)
                 pygame.quit()
 
     def shot(self, keys, enemys):
