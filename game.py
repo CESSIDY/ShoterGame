@@ -65,6 +65,8 @@ class RedrawGameWindows(object):
         self.events_generator.draw()
 
     def change_win_bg_on_screenshot(self):
+        pygame.display.set_mode((1, 1))
+        pygame.display.update()
         myScreenshot = pyautogui.screenshot()
         myScreenshot.save(r'screen_db.png')
         self.settings['bg'] = pygame.image.load('screen_db.png')
@@ -72,8 +74,6 @@ class RedrawGameWindows(object):
     def change_win_resolution(self):
         user32 = ctypes.windll.user32
         screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
-        pygame.display.set_mode((1, 1))
-        pygame.display.update()
         self.settings['ScreenWidth'] = screensize[0]
         self.settings['ScreenHeight'] = screensize[1]
         self.settings['playZoneYCoordinates'] = self.settings['ScreenHeight'] - 110

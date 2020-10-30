@@ -16,6 +16,8 @@ class Player(object):
                 pygame.image.load('resources/images/L7.png'), pygame.image.load('resources/images/L8.png'),
                 pygame.image.load('resources/images/L9.png')]
     char = pygame.image.load('resources/images/standing.png')
+    bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet9_left.png'), (10, 10))
+    bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet9_right.png'), (10, 10))
     shield_width = 50
     shield_height = 50
     shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'),
@@ -151,8 +153,13 @@ class Player(object):
             else:
                 facing = 1
             if len(self.bullets) < self.max_bullets:
+                if facing == -1:
+                    byll_img = self.bullet_img_left
+                else:
+                    byll_img = self.bullet_img_right
                 self.bullets.append(
-                    Projectile(round(self.x + self.width // 2), round(self.y + self.height // 2), 6, (0, 0, 0), facing))
+                    Projectile(round(self.x + self.width // 2), round(self.y + self.height // 2), 6, (0, 0, 0), facing,
+                               win=self.win, image=byll_img))
             self.shootLoop = 1
 
     def drawBullets(self):
