@@ -85,6 +85,9 @@ class RedrawGameWindows(object):
         self.player.playZoneXCoordinates = self.settings['ScreenWidth'] // 2
         self.player.y = self.settings['ScreenHeight'] - 110
         self.player.vel += 1
+        self.player.isJump = False
+        self.player.walkCount = 0
+        self.player.shootLoop = 0
         self.player.max_bullets = 10
 
     def change_enemys_settings_to_new_win(self):

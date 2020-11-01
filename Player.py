@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 # from Settings import ScreenHeight, ScreenWidth, bulletSound, playZoneYCoordinates
 from Projectlite import Projectile
 from datetime import timedelta, datetime
@@ -118,6 +118,7 @@ class Player(object):
             if self.health <= 0:
                 print(self.score)
                 pygame.quit()
+                sys.exit()
 
     def shot(self, keys, enemys):
         if self.shootLoop > 0:
