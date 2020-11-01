@@ -16,8 +16,8 @@ class Player(object):
                 pygame.image.load('resources/images/L7.png'), pygame.image.load('resources/images/L8.png'),
                 pygame.image.load('resources/images/L9.png')]
     char = pygame.image.load('resources/images/standing.png')
-    bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet9_left.png'), (10, 10))
-    bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet9_right.png'), (10, 10))
+    bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_left.png'), (10, 10))
+    bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_right.png'), (10, 10))
     shield_width = 50
     shield_height = 50
     shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'),
@@ -147,12 +147,12 @@ class Player(object):
                     pass
 
         if keys[pygame.K_SPACE] and self.shootLoop == 0:
-            self.settings['bulletSound'].play()
             if self.left:
                 facing = -1
             else:
                 facing = 1
             if len(self.bullets) < self.max_bullets:
+                self.settings['bulletSound'].play()
                 if facing == -1:
                     byll_img = self.bullet_img_left
                 else:

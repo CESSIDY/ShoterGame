@@ -28,7 +28,7 @@ class RedrawGameWindows(object):
         }
         self.win = pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']))
         self.isWorldChange = False
-        self.keys = []
+        self.keys = list()
         self.player = Player(self.settings['ScreenWidth'] // 2, self.settings['playZoneYCoordinates'], 64, 64, self.win,
                              self.settings)
         self.enemys_generator = GenerateEnemys(self.player, self.win, self.settings)
@@ -37,6 +37,7 @@ class RedrawGameWindows(object):
         pygame.display.set_caption("When will it all end?")
         pygame.mixer.music.play(-1)
         self.clock = pygame.time.Clock()
+        self.pause = False
 
     def draw(self):
         self.change_bg_and_update()
@@ -113,13 +114,18 @@ class RedrawGameWindows(object):
         while run:
             clock.tick(30)
             self.keys = pygame.key.get_pressed()
-            run = self.isWindowClose()
-            self.enemys_generator.action()
-            self.box_generator.action()
-            self.events_generator.action(self.enemys_generator.enemys)
-            self.events_generator.add_event(self.box_generator.events)
-            self.player.action(self.keys, self.enemys_generator.enemys)
-            self.draw()
+            self.gamePause()
+            if not self.pause:
+                run = self.isWindowClose()
+                self.enemys_generator.action()
+                self.box_generator.action()
+                self.events_generator.action(self.enemys_generator.enemys)
+                self.events_generator.add_event(self.box_generator.events)
+                self.player.action(self.keys, self.enemys_generator.enemys)
+                self.draw()
+            else:
+                self.pauseMenu()
+
         pygame.quit()
 
     def draw_line_to_objects(self):
@@ -137,12 +143,23 @@ class RedrawGameWindows(object):
                                      [player_center_cordiats['x'], player_center_cordiats['y']],
                                      [bullet.x, bullet.y], 1)
 
+    def gamePause(self):
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
+                if self.keys[pygame.K_ESCAPE] and not self.pause:
+                    self.pause = True
+                elif self.keys[pygame.K_ESCAPE] and self.pause:
+                    self.pause = False
+
+    def pauseMenu(self):
+        text = self.settings['font'].render("PAUSE", 1, (0, 0, 0))  # Arguments are: text, anti-aliasing, color
+        self.win.blit(text, (self.settings['ScreenWidth'] // 2, self.settings['ScreenHeight'] // 2))
+        pygame.display.update()
+
     def isWindowClose(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
-        if self.keys[pygame.K_ESCAPE]:
-            return False
         return True
 
 
