@@ -29,8 +29,8 @@ class RedrawGameWindows(object):
         self.win = pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']))
         self.isWorldChange = False
         self.keys = list()
-        self.player = Player(self.settings['ScreenWidth'] // 2, self.settings['playZoneYCoordinates'], 64, 64, self.win,
-                             self.settings)
+        self.events = list()
+        self.player = Player(self.win, self.settings)
         self.enemys_generator = GenerateEnemys(self.player, self.win, self.settings)
         self.box_generator = GenerateBoxes(self.player, self.win, self.settings)
         self.events_generator = GenerateEvents(self.player, self.win, self.settings)
@@ -82,12 +82,8 @@ class RedrawGameWindows(object):
 
     def change_player_settings_to_new_win(self):
         self.player.settings = self.settings
-        self.player.playZoneXCoordinates = self.settings['ScreenWidth'] // 2
-        self.player.y = self.settings['ScreenHeight'] - 110
+        self.player.defaultState()
         self.player.vel += 1
-        self.player.isJump = False
-        self.player.walkCount = 0
-        self.player.shootLoop = 0
         self.player.max_bullets = 10
 
     def change_enemys_settings_to_new_win(self):
@@ -117,6 +113,7 @@ class RedrawGameWindows(object):
         while run:
             clock.tick(30)
             self.keys = pygame.key.get_pressed()
+            self.events = pygame.event.get()
             self.gamePause()
             if not self.pause:
                 run = self.isWindowClose()
@@ -147,7 +144,7 @@ class RedrawGameWindows(object):
                                      [bullet.x, bullet.y], 1)
 
     def gamePause(self):
-        for event in pygame.event.get():
+        for event in self.events:
             if event.type == pygame.KEYDOWN or event.type == pygame.KEYUP:
                 if self.keys[pygame.K_ESCAPE] and not self.pause:
                     self.pause = True
@@ -160,7 +157,7 @@ class RedrawGameWindows(object):
         pygame.display.update()
 
     def isWindowClose(self):
-        for event in pygame.event.get():
+        for event in self.events:
             if event.type == pygame.QUIT:
                 return False
         return True

@@ -15,7 +15,6 @@ class Player(object):
                 pygame.image.load('resources/images/L5.png'), pygame.image.load('resources/images/L6.png'),
                 pygame.image.load('resources/images/L7.png'), pygame.image.load('resources/images/L8.png'),
                 pygame.image.load('resources/images/L9.png')]
-    char = pygame.image.load('resources/images/standing.png')
     bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_left.png'), (10, 10))
     bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_right.png'), (10, 10))
     shield_width = 50
@@ -23,11 +22,11 @@ class Player(object):
     shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'),
                                     (shield_width, shield_height))
 
-    def __init__(self, x, y, width, height, win, settings):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+    def __init__(self, win, settings):
+        self.x = int(settings['ScreenWidth'] // 2)
+        self.y = int(settings['playZoneYCoordinates'])
+        self.width = 64
+        self.height = 64
         self.win = win
         self.vel = 5
         self.isJump = False
@@ -44,76 +43,123 @@ class Player(object):
         self.score = 0
         self.health = 4
         self.settings = settings
-        self.restart_date_time = datetime.now() + timedelta(seconds=2)
-        self.saveZoneXCoordinates = settings['ScreenWidth'] // 2
-        self.playZoneXCoordinates = settings['ScreenWidth'] // 2
+        self.restart_date_time = datetime.now() + timedelta(seconds=4)
+
+    def defaultState(self):
+        self.jumpCount = 10
+        self.isJump = False
+        self.x = self.settings['ScreenWidth'] // 2
+        self.y = self.settings['playZoneYCoordinates']
+        self.walkCount = 0
+        self.shootLoop = 0
+        self.restart_date_time = datetime.now() + timedelta(seconds=4)
 
     def action(self, keys, enemys):
         self.move(keys)
         self.shot(keys, enemys)
 
-    def draw(self):
-        self.drawBullets()
+    def RestartWalkCountIfAnimationEnd(self):
         if self.walkCount + 1 >= 27:
             self.walkCount = 0
+
+    def DrawShield(self):
         if self.restart_date_time >= datetime.now():
             shield_x = self.x + ((self.width - self.shield_width) / 2)
             shield_y = self.y + ((self.height - self.shield_height) / 2)
             self.win.blit(self.shield, (shield_x, shield_y))
-        if not self.standing:
-            if self.left:
-                self.win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
-                self.walkCount += 1
-            elif self.right:
-                self.win.blit(self.walkRight[self.walkCount // 3], (self.x, self.y))
-                self.walkCount += 1
+
+    def DrawWalk(self):
+        if self.left:
+            self.win.blit(self.walkLeft[self.walkCount // 3], (self.x, self.y))
+            self.walkCount += 1
+        elif self.right:
+            self.win.blit(self.walkRight[self.walkCount // 3], (self.x, self.y))
+            self.walkCount += 1
+
+    def DrawStanding(self):
+        if self.right:
+            self.win.blit(self.walkRight[0], (self.x, self.y))
         else:
-            if self.right:
-                self.win.blit(self.walkRight[0], (self.x, self.y))
-            else:
-                self.win.blit(self.walkLeft[0], (self.x, self.y))
+            self.win.blit(self.walkLeft[0], (self.x, self.y))
+
+    def updateHitBox(self):
         self.hitbox = (self.x + 17, self.y + 11, 29, 52)
 
-    def move(self, keys):
-        if keys[pygame.K_LEFT] and self.x > self.vel:
-            self.x -= int(self.vel)
-            self.left = True
+    def draw(self):
+        self.drawBullets()
+        self.RestartWalkCountIfAnimationEnd()
+        self.DrawShield()
+        if not self.standing:
+            self.DrawWalk()
+        else:
+            self.DrawStanding()
+        self.updateHitBox()
+
+    def isMoveLeft(self, keys):
+        return keys[pygame.K_LEFT] and self.x > self.vel
+
+    def MoveLeft(self):
+        self.x -= int(self.vel)
+        self.left = True
+        self.right = False
+        self.standing = False
+
+    def isMoveRight(self, keys):
+        return keys[pygame.K_RIGHT] and self.x + self.width + self.vel < self.settings['ScreenWidth']
+
+    def MoveRight(self):
+        self.x += int(self.vel)
+        self.left = False
+        self.right = True
+        self.standing = False
+
+    def Standing(self):
+        self.standing = True
+        self.walkCount = 0
+
+    def Jump(self, keys):
+        if keys[pygame.K_UP]:
+            self.isJump = True
             self.right = False
-            self.standing = False
-        elif keys[pygame.K_RIGHT] and self.x + self.width + self.vel < self.settings['ScreenWidth']:
-            self.x += int(self.vel)
             self.left = False
-            self.right = True
-            self.standing = False
-        else:
-            self.standing = True
             self.walkCount = 0
-        if not self.isJump:
-            if keys[pygame.K_UP]:
-                self.isJump = True
-                self.right = False
-                self.left = False
-                self.walkCount = 0
+
+    def isInAirAfterJump(self):
+        return self.jumpCount >= -10
+
+    def JumpAction(self):
+        neg = 1
+        if self.jumpCount < 0:
+            neg = -1
+        self.y -= int((self.jumpCount ** 2) * 0.5 * neg)
+        self.jumpCount -= 1
+
+    def JumpStop(self):
+        self.isJump = False
+        self.jumpCount = 10
+
+    def move(self, keys):
+        if self.isMoveLeft(keys):
+            self.MoveLeft()
+        elif self.isMoveRight(keys):
+            self.MoveRight()
         else:
-            if self.jumpCount >= -10:
-                neg = 1
-                if self.jumpCount < 0:
-                    neg = -1
-                self.y -= int((self.jumpCount ** 2) * 0.5 * neg)
-                self.jumpCount -= 1
+            self.Standing()
+        if not self.isJump:
+            self.Jump(keys)
+        else:
+            if self.isInAirAfterJump():
+                self.JumpAction()
             else:
-                self.isJump = False
-                self.jumpCount = 10
+                self.JumpStop()
+
+    def isProtected(self):
+        return self.restart_date_time >= datetime.now()
 
     def hit(self):
-        if self.restart_date_time <= datetime.now():
-            self.jumpCount = 10
-            self.isJump = False
-            self.x = self.playZoneXCoordinates
-            self.y = self.settings['playZoneYCoordinates']
-            self.walkCount = 0
+        if not self.isProtected():
+            self.defaultState()
             self.health -= 1
-            self.restart_date_time = datetime.now() + timedelta(seconds=5)
             self.score -= 2
             if self.health <= 0:
                 print(self.score)
