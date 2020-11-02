@@ -14,7 +14,7 @@ import ctypes
 pygame.init()
 
 
-class RedrawGameWindows(object):
+class gameWindow(object):
     def __init__(self):
         self.settings = {
             'ScreenWidth': 1100,
@@ -40,18 +40,18 @@ class RedrawGameWindows(object):
         self.pause = False
 
     def draw(self):
-        self.change_bg_and_update()
-        self.draw_moving_objects()
-        self.draw_health_bar()
-        self.draw_score_bar()
+        self.changeBg()
+        self.drawMovingObjects()
+        self.drawHealthBar()
+        self.drawScoreBar()
         pygame.display.update()
 
-    def draw_score_bar(self):
+    def drawScoreBar(self):
         text = self.settings['font'].render("Score: " + str(self.player.score), 1,
                                             (0, 0, 0))  # Arguments are: text, anti-aliasing, color
         self.win.blit(text, (self.settings['ScreenWidth'] - 150, 10))
 
-    def draw_health_bar(self):
+    def drawHealthBar(self):
         health_width = 50
         for _ in range(self.player.health):
             self.win.blit(
@@ -59,20 +59,20 @@ class RedrawGameWindows(object):
                 (health_width, 10))
             health_width += 20
 
-    def draw_moving_objects(self):
+    def drawMovingObjects(self):
         self.enemys_generator.draw()
         self.box_generator.draw()
         self.player.draw()
         self.events_generator.draw()
 
-    def change_win_bg_on_screenshot(self):
+    def changeWinBgOnScreenshot(self):
         pygame.display.set_mode((1, 1))
         pygame.display.update()
         myScreenshot = pyautogui.screenshot()
         myScreenshot.save(r'screen_db.png')
         self.settings['bg'] = pygame.image.load('screen_db.png')
 
-    def change_win_resolution(self):
+    def changeWinResolution(self):
         user32 = ctypes.windll.user32
         screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
         self.settings['ScreenWidth'] = screensize[0]
@@ -80,31 +80,31 @@ class RedrawGameWindows(object):
         self.settings['playZoneYCoordinates'] = self.settings['ScreenHeight'] - 110
         pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']), pygame.FULLSCREEN)
 
-    def change_player_settings_to_new_win(self):
+    def changePlayerSettingsToNewWin(self):
         self.player.settings = self.settings
         self.player.defaultState()
         self.player.vel += 1
         self.player.max_bullets = 10
 
-    def change_enemys_settings_to_new_win(self):
+    def changeEnemysSettingsToNewWin(self):
         self.enemys_generator.settings = self.settings
         self.enemys_generator.max_enemys = 10
         self.enemys_generator.enemys = []
 
-    def change_event_settings_to_new_win(self):
+    def changeEventSettingsToNewWin(self):
         self.events_generator.settings = self.settings
 
-    def change_box_settings_to_new_win(self):
+    def changeBoxSettingsToNewWin(self):
         self.events_generator.settings = self.settings
 
-    def change_bg_and_update(self):
+    def changeBg(self):
         if self.player.score > 1 and not self.isWorldChange:
-            self.change_win_bg_on_screenshot()
-            self.change_win_resolution()
-            self.change_player_settings_to_new_win()
-            self.change_enemys_settings_to_new_win()
-            self.change_event_settings_to_new_win()
-            self.change_box_settings_to_new_win()
+            self.changeWinBgOnScreenshot()
+            self.changeWinResolution()
+            self.changePlayerSettingsToNewWin()
+            self.changeEnemysSettingsToNewWin()
+            self.changeEventSettingsToNewWin()
+            self.changeBoxSettingsToNewWin()
             self.isWorldChange = True
         self.win.blit(self.settings['bg'], (0, 0))
 
@@ -115,8 +115,8 @@ class RedrawGameWindows(object):
             self.keys = pygame.key.get_pressed()
             self.events = pygame.event.get()
             self.gamePause()
+            run = self.isWindowClose()
             if not self.pause:
-                run = self.isWindowClose()
                 self.enemys_generator.action()
                 self.box_generator.action()
                 self.events_generator.action(self.enemys_generator.enemys)
@@ -128,7 +128,7 @@ class RedrawGameWindows(object):
 
         pygame.quit()
 
-    def draw_line_to_objects(self):
+    def drawLineToObjects(self):
         player_center_cordiats = {'x': self.player.x + self.player.width // 2,
                                   'y': self.player.y + self.player.height // 2}
         for box in self.box_generator.boxes:
@@ -163,5 +163,5 @@ class RedrawGameWindows(object):
         return True
 
 
-game_window = RedrawGameWindows()
+game_window = gameWindow()
 game_window.start()
