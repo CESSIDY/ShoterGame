@@ -23,14 +23,14 @@ class gameWindow(object):
             'bg': pygame.image.load('resources/images/bg.jpg'),
             'font': pygame.font.SysFont("comicsans", 30, True),
             'bulletSound': pygame.mixer.Sound('resources/audio/bullet.wav'),
-            'hitSound': pygame.mixer.Sound('resources/audio/hit.wav'),
-            'music': pygame.mixer.music.load('resources/audio/music.wav')
+            'hitSound': pygame.mixer.Sound('resources/audio/hit.wav')
         }
         self.win = win
         self.worlds_generator = GenerateWorlds(self.settings, self.win)
         self.keys = list()
         self.events = list()
         pygame.display.set_caption("When will it all end?")
+        pygame.mixer.music.load('resources/audio/music.wav')
         pygame.mixer.music.play(-1)
         self.clock = pygame.time.Clock()
         self.pause = False

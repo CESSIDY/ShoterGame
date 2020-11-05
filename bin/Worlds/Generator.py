@@ -31,7 +31,6 @@ class GenerateWorlds(object):
     def action(self, keys, event):
         if self.activeWorld.isCloseWorld() or not self.activeWorld.isAccessWorld():
             for world in self.worlds:
-                print(world)
                 if world.isAccessWorld() and not world.isCloseWorld():
                     self.activeWorld = world
                     self.activeWorld.generate()
