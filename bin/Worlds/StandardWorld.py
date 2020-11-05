@@ -8,16 +8,6 @@ import ctypes
 
 class StandardWorld(BaseWorld):
     def __init__(self, setting, player, win, enemys_generator, box_generator, events_generator):
-        settings = {
-            'ScreenWidth': 1100,
-            'ScreenHeight': 700,
-            'playZoneYCoordinates': 550,
-            'bg': pygame.image.load('resources/images/bg.jpg'),
-            'font': pygame.font.SysFont("comicsans", 30, True),
-            'bulletSound': pygame.mixer.Sound('resources/audio/bullet.wav'),
-            'hitSound': pygame.mixer.Sound('resources/audio/hit.wav'),
-            'music': pygame.mixer.music.load('resources/audio/music.wav')
-        }
         super().__init__(setting, player, win, enemys_generator, box_generator, events_generator)
 
     def __str__(self):
@@ -60,13 +50,17 @@ class StandardWorld(BaseWorld):
         self.events_generator.draw()
 
     def changeWinBgOnScreenshot(self):
+        self.settings['bg'] = pygame.image.load('resources/images/bg.jpg')
         self.win.blit(self.settings['bg'], (0, 0))
 
     def changeWinResolution(self):
+        self.settings['ScreenWidth'] = 1100
+        self.settings['ScreenHeight'] = 700
         pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']))
         pygame.display.update()
 
     def changePlayerSettingsToNewWin(self):
+        self.settings['playZoneYCoordinates'] = 550
         self.player.settings = self.settings
         self.player.defaultState()
         self.player.vel = 5
