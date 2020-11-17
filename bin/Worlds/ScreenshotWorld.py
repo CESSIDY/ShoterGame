@@ -23,12 +23,12 @@ class ScreenshotWorld(BaseWorld):
         return self.player.score > 5
 
     def generate(self):
-        self.changeWinBgOnScreenshot()
+        self.changeWinBg()
         self.changeWinResolution()
-        self.changePlayerSettingsToNewWin()
-        self.changeEnemysSettingsToNewWin()
-        self.changeEventSettingsToNewWin()
-        self.changeBoxSettingsToNewWin()
+        self.changePlayerSettings()
+        self.changeEnemysSettings()
+        self.changeEventSettings()
+        self.changeBoxSettings()
 
     def draw(self):
         self.win.blit(self.settings['bg'], (0, 0))
@@ -49,7 +49,7 @@ class ScreenshotWorld(BaseWorld):
         self.player.draw()
         self.events_generator.draw()
 
-    def changeWinBgOnScreenshot(self):
+    def changeWinBg(self):
         pygame.display.set_mode((1, 1))
         pygame.display.update()
         myScreenshot = pyautogui.screenshot()
@@ -65,21 +65,21 @@ class ScreenshotWorld(BaseWorld):
         self.settings['playZoneYCoordinates'] = self.settings['ScreenHeight'] - 110
         pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']), pygame.FULLSCREEN)
 
-    def changePlayerSettingsToNewWin(self):
+    def changePlayerSettings(self):
         self.player.settings = self.settings
         self.player.defaultState()
         self.player.vel = 6
         self.player.max_bullets = 10
 
-    def changeEnemysSettingsToNewWin(self):
+    def changeEnemysSettings(self):
         self.enemys_generator.settings = self.settings
         self.enemys_generator.max_enemys = 10
         self.enemys_generator.enemys = []
 
-    def changeEventSettingsToNewWin(self):
+    def changeEventSettings(self):
         self.events_generator.settings = self.settings
 
-    def changeBoxSettingsToNewWin(self):
+    def changeBoxSettings(self):
         self.events_generator.settings = self.settings
 
     def start(self, keys, events):

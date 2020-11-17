@@ -6,21 +6,21 @@ import pyautogui
 import ctypes
 
 
-class StandardWorld(BaseWorld):
+class CubeWorld(BaseWorld):
     def __init__(self, setting, player, win, enemys_generator, box_generator, events_generator):
         super().__init__(setting, player, win, enemys_generator, box_generator, events_generator)
 
     def __str__(self):
-        return "Standart World"
+        return "Cube World"
 
     def uploadAccessData(self, player):
-        super(StandardWorld, self).uploadAccessData(player)
+        super(CubeWorld, self).uploadAccessData(player)
 
     def isAccessWorld(self):
-        return self.player.score < 1
+        return self.player.score > 5
 
     def isCloseWorld(self):
-        return self.player.score > 1
+        return self.player.score > 20
 
     def generate(self):
         self.changeWinBg()
@@ -38,10 +38,10 @@ class StandardWorld(BaseWorld):
         pygame.display.update()
 
     def drawScoreBar(self):
-        super(StandardWorld, self).drawScoreBar()
+        super(CubeWorld, self).drawScoreBar()
 
     def drawHealthBar(self):
-        super(StandardWorld, self).drawHealthBar()
+        super(CubeWorld, self).drawHealthBar()
 
     def drawMovingObjects(self):
         self.enemys_generator.draw()
@@ -50,25 +50,30 @@ class StandardWorld(BaseWorld):
         self.events_generator.draw()
 
     def changeWinBg(self):
-        self.settings['bg'] = pygame.image.load('resources/images/bg.jpg')
+        pygame.display.set_mode((1, 1))
+        pygame.display.update()
+        myScreenshot = pyautogui.screenshot()
+        myScreenshot.save(r'screen_db.png')
+        self.settings['bg'] = pygame.image.load('screen_db.png')
         self.win.blit(self.settings['bg'], (0, 0))
 
     def changeWinResolution(self):
-        self.settings['ScreenWidth'] = 1100
-        self.settings['ScreenHeight'] = 700
-        pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']))
-        pygame.display.update()
+        user32 = ctypes.windll.user32
+        screensize = user32.GetSystemMetrics(0), user32.GetSystemMetrics(1)
+        self.settings['ScreenWidth'] = screensize[0]
+        self.settings['ScreenHeight'] = screensize[1]
+        self.settings['playZoneYCoordinates'] = self.settings['ScreenHeight'] - 110
+        pygame.display.set_mode((self.settings['ScreenWidth'], self.settings['ScreenHeight']), pygame.FULLSCREEN)
 
     def changePlayerSettings(self):
-        self.settings['playZoneYCoordinates'] = 550
         self.player.settings = self.settings
         self.player.defaultState()
-        self.player.vel = 5
-        self.player.max_bullets = 5
+        self.player.vel = 6
+        self.player.max_bullets = 10
 
     def changeEnemysSettings(self):
         self.enemys_generator.settings = self.settings
-        self.enemys_generator.max_enemys = 5
+        self.enemys_generator.max_enemys = 10
         self.enemys_generator.enemys = []
 
     def changeEventSettings(self):
@@ -78,7 +83,7 @@ class StandardWorld(BaseWorld):
         self.events_generator.settings = self.settings
 
     def start(self, keys, events):
-        super(StandardWorld, self).start(keys, events)
+        super(CubeWorld, self).start(keys, events)
 
     def drawLineToObjects(self):
-        super(StandardWorld, self).drawLineToObjects()
+        super(CubeWorld, self).drawLineToObjects()

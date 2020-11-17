@@ -1,15 +1,7 @@
-import random
 from abc import ABC, abstractmethod
 import pygame
-from Settings import ScreenWidth, playZoneYCoordinates, ScreenHeight, font, bg, bulletSound, hitSound, win, clock
-from Player import Player
-from Projectlite import Projectile
-from bin.Enemys.Generator import GenerateEnemys
-from bin.Boxes.Generator import GenerateBoxes
-from bin.Events.Generator import GenerateEvents
 from bin.Enemys.BaseEnemys import BaseShotEnemy
-import pyautogui
-import ctypes
+
 
 
 class BaseWorld(ABC):
