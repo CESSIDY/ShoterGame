@@ -5,6 +5,8 @@ from .BaseWorld import BaseWorld
 import pyautogui
 import ctypes
 
+from ..Players.AIPlayer import AIPlayer
+
 
 class StandardWorld(BaseWorld):
     def __init__(self, setting, player, win, enemys_generator, box_generator, events_generator):

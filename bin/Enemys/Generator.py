@@ -3,7 +3,9 @@ import random
 from .BaseEnemys import BaseShotEnemy
 from .Goblin import Goblin
 from .Cowboy import Cowboy
-#from Settings import ScreenWidth, playZoneYCoordinates
+
+
+# from Settings import ScreenWidth, playZoneYCoordinates
 
 
 class GenerateEnemys(object):
@@ -17,7 +19,8 @@ class GenerateEnemys(object):
     def generate(self, fight=True, shot=False, fly=False):
         if len(self.enemys) < self.max_enemys:
             for _ in range(self.max_enemys - len(self.enemys)):
-                what_x = [random.randint(self.settings['ScreenWidth'], self.settings['ScreenWidth'] + 200), random.randint(-200, 0)]
+                what_x = [random.randint(self.settings['ScreenWidth'], self.settings['ScreenWidth'] + 200),
+                          random.randint(-200, 0)]
                 x = random.choice(what_x)
                 enemys_type = []
                 if fight:
@@ -28,7 +31,7 @@ class GenerateEnemys(object):
                 self.enemys.append(enemy)
 
     def action(self):
-        self.generate(shot=True)
+        self.generate(fight=True, shot=True)
         self.fight()
 
     def fight(self):

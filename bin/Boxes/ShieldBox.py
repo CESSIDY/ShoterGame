@@ -11,6 +11,9 @@ class ShieldBox(BaseBox):
         super(ShieldBox, self).__init__(x, y, width, height, settings)
         self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/shield_box.png'), (30, 30))
 
+    def __str__(self):
+        return 'shield'
+
     def draw(self, win):
         super(ShieldBox, self).draw(win)
 

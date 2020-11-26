@@ -13,6 +13,9 @@ class AirStrileBox(BaseEventBox):
         super(AirStrileBox, self).__init__(x, y, width, height, settings)
         self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/air_strike_box.png'), (30, 30))
 
+    def __str__(self):
+        return 'air strike'
+
     def draw(self, win):
         super(AirStrileBox, self).draw(win)
 

@@ -4,6 +4,7 @@ from Settings import ScreenWidth, playZoneYCoordinates, ScreenHeight, font, bg, 
 from .BaseWorld import BaseWorld
 import pyautogui
 import ctypes
+from bin.Players.AIPlayer import AIPlayer
 
 
 class CubeWorld(BaseWorld):

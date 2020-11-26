@@ -10,6 +10,9 @@ class HealthBox(BaseBox):
         super(HealthBox, self).__init__(x, y, width, height, settings)
         self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/health_box.png'), (30, 30))
 
+    def __str__(self):
+        return 'health'
+
     def draw(self, win):
         super(HealthBox, self).draw(win)
 
