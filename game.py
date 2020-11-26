@@ -64,8 +64,9 @@ class gameWindow(object):
                     val_array = world.getWorldInfo()
                     self.AI_keys = nets[key].activate((val_array))
                     world.action(self.AI_keys, self.events)
-                    if world.player.isJumpedSomething(world.enemys_generator.enemys):
-                        ge[key].fitness += 0.09
+                    jumpedCount = world.player.isJumpedSomething(world.enemys_generator.enemys)
+                    if jumpedCount:
+                        ge[key].fitness += jumpedCount * 0.09
                     # give player a fitness of 0.5 for each enemy that he kill
                     if world.player.score > temp_score:
                         ge[key].fitness += 0.7
