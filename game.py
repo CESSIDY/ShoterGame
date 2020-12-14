@@ -25,8 +25,8 @@ class gameWindow(object):
         }
         self.win = win
         self.AI = AI
-        self.keys = list()
-        self.events = list()
+        self.keys = tuple()
+        self.events = tuple()
         if not self.AI:
             player = Player(self.win, self.settings)
             pygame.display.set_caption("When will it all end?")
@@ -37,6 +37,14 @@ class gameWindow(object):
         else:
             self.AI_keys = list()
         self.pause = False
+
+    def setLikePlayer(self):
+        player = Player(self.win, self.settings)
+        pygame.display.set_caption("When will it all end?")
+        pygame.mixer.music.load('resources/audio/music.wav')
+        pygame.mixer.music.play(-1)
+        self.clock = pygame.time.Clock()
+        self.worlds_generator = GenerateWorlds(self.settings, self.win, player)
 
     def AIStart(self, genomes=None, config=None):
         nets = []
@@ -95,9 +103,8 @@ class gameWindow(object):
         run = True
         while run:
             clock.tick(30)
-            self.keys = pygame.key.get_pressed()
             self.events = pygame.event.get()
-            self.gamePause()
+            self.keys = pygame.key.get_pressed()
             run = self.isWindowClose()
             self.gamePause()
             if not self.pause:
@@ -128,11 +135,10 @@ class gameWindow(object):
         return True
 
 
-# game_window = gameWindow()
-# game_window.start()
+game_window = gameWindow(AI=True)
 
 
-def run(config_file):
+def run_AI(config_file):
     """
     runs the NEAT algorithm to train a neural network to play flappy bird.
     :param config_file: location of config file
@@ -152,16 +158,96 @@ def run(config_file):
     # p.add_reporter(neat.Checkpointer(5))
 
     # Run for up to 50 generations.
-    winner = p.run(gameWindow(AI=True).AIStart, 500)
+    # winner = p.run(gameWindow(AI=True).AIStart, 500)
+    winner = p.run(game_window.AIStart, 500)
 
     # show final stats
     print('\nBest genome:\n{!s}'.format(winner))
 
 
+def start_menu():
+    def is_AI_Button():
+        return (game_window.settings['ScreenWidth'] // 2 - 150) <= mouse[0] <= (game_window.settings[
+                                                                                    'ScreenWidth'] // 2 - 10) and (
+                       game_window.settings['ScreenHeight'] // 2 - 20) <= mouse[1] <= (game_window.settings[
+                                                                                           'ScreenHeight'] / 2 + 20)
+
+    def draw_AI_Button(color):
+        pygame.draw.rect(game_window.win, color,
+                         [game_window.settings['ScreenWidth'] // 2 - 150,
+                          game_window.settings['ScreenHeight'] // 2 - 20, 140,
+                          40])
+        ai_text = game_window.settings['font'].render("AI", 1, (0, 0, 0))
+        game_window.win.blit(ai_text, (
+            game_window.settings['ScreenWidth'] // 2 - ((150 // 2) + 15),
+            game_window.settings['ScreenHeight'] // 2 - 8))
+
+    def is_Player_Button():
+        return (game_window.settings['ScreenWidth'] // 2 + 10) <= mouse[0] <= (game_window.settings[
+                                                                                   'ScreenWidth'] // 2 + 150) and (
+                       game_window.settings['ScreenHeight'] // 2 - 20) <= mouse[1] <= (game_window.settings[
+                                                                                           'ScreenHeight'] / 2 + 20)
+
+    def draw_Player_Button(color):
+        pygame.draw.rect(game_window.win, color,
+                         [game_window.settings['ScreenWidth'] // 2 + 10,
+                          game_window.settings['ScreenHeight'] // 2 - 20, 140,
+                          40])
+        player_text = game_window.settings['font'].render("Player", 1, (0, 0, 0))
+        game_window.win.blit(player_text, (
+            game_window.settings['ScreenWidth'] // 2 + ((150 // 2) - 30),
+            game_window.settings['ScreenHeight'] // 2 - 8))
+
+    run = True
+    AI = False
+    while run:
+        mouse = pygame.mouse.get_pos()
+        # light shade of the button
+        color_light = (170, 170, 170)
+        # dark shade of the button
+        color_dark = (100, 100, 100)
+
+        if is_AI_Button():
+            draw_AI_Button(color_light)
+        else:
+            draw_AI_Button(color_dark)
+
+        if is_Player_Button():
+            draw_Player_Button(color_light)
+        else:
+            draw_Player_Button(color_dark)
+
+        pygame.display.update()
+
+        # checks if a mouse is clicked
+        for ev in pygame.event.get():
+            if ev.type == pygame.MOUSEBUTTONDOWN:
+                # if the mouse is clicked on the button the game is terminated
+                if is_Player_Button():
+                    AI = False
+                    run = False
+                    break
+                elif is_AI_Button():
+                    AI = True
+                    run = False
+                    break
+
+    if AI:
+        local_dir = os.path.dirname(__file__)
+        config_path = os.path.join(local_dir, 'config-feedforward.txt')
+        run_AI(config_path)
+    else:
+        game_window.setLikePlayer()
+        game_window.start()
+
+
 if __name__ == '__main__':
+    # game_window = gameWindow()
+    # game_window.start()
+    start_menu()
     # Determine path to configuration file. This path manipulation is
     # here so that the script will run successfully regardless of the
     # current working directory.
-    local_dir = os.path.dirname(__file__)
-    config_path = os.path.join(local_dir, 'config-feedforward.txt')
-    run(config_path)
+    # local_dir = os.path.dirname(__file__)
+    # config_path = os.path.join(local_dir, 'config-feedforward.txt')
+    # run(config_path)
