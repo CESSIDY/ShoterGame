@@ -9,8 +9,6 @@ from bin.Players.Player import Player
 from bin.Players.AIPlayer import AIPlayer
 from multiprocessing import Process
 
-pygame.init()
-
 
 class gameWindow(object):
     def __init__(self, AI=False):
@@ -18,7 +16,7 @@ class gameWindow(object):
             'ScreenWidth': 1100,
             'ScreenHeight': 700,
             'playZoneYCoordinates': 550,
-            'bg': pygame.image.load('resources/images/bg.jpg'),
+            'bg': pygame.image.load('resources/images/bg.jpg').convert(),
             'font': pygame.font.SysFont("comicsans", 30, True),
             'bulletSound': pygame.mixer.Sound('resources/audio/bullet.wav'),
             'hitSound': pygame.mixer.Sound('resources/audio/hit.wav')
@@ -176,7 +174,7 @@ def start_menu():
         pygame.draw.rect(game_window.win, color,
                          [game_window.settings['ScreenWidth'] // 2 - 150,
                           game_window.settings['ScreenHeight'] // 2 - 20, 140,
-                          40])
+                          55])
         ai_text = game_window.settings['font'].render("AI", 1, (0, 0, 0))
         game_window.win.blit(ai_text, (
             game_window.settings['ScreenWidth'] // 2 - ((150 // 2) + 15),
@@ -192,7 +190,7 @@ def start_menu():
         pygame.draw.rect(game_window.win, color,
                          [game_window.settings['ScreenWidth'] // 2 + 10,
                           game_window.settings['ScreenHeight'] // 2 - 20, 140,
-                          40])
+                          55])
         player_text = game_window.settings['font'].render("Player", 1, (0, 0, 0))
         game_window.win.blit(player_text, (
             game_window.settings['ScreenWidth'] // 2 + ((150 // 2) - 30),

@@ -55,7 +55,7 @@ class CubeWorld(BaseWorld):
         pygame.display.update()
         myScreenshot = pyautogui.screenshot()
         myScreenshot.save(r'screen_db.png')
-        self.settings['bg'] = pygame.image.load('screen_db.png')
+        self.settings['bg'] = pygame.image.load('screen_db.png').convert()
         self.win.blit(self.settings['bg'], (0, 0))
 
     def changeWinResolution(self):

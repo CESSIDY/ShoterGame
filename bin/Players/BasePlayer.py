@@ -5,21 +5,31 @@ from datetime import timedelta, datetime
 
 
 class BasePlayer(object):
-    walkRight = [pygame.image.load('resources/images/R1.png'), pygame.image.load('resources/images/R2.png'),
-                 pygame.image.load('resources/images/R3.png'), pygame.image.load('resources/images/R4.png'),
-                 pygame.image.load('resources/images/R5.png'), pygame.image.load('resources/images/R6.png'),
-                 pygame.image.load('resources/images/R7.png'), pygame.image.load('resources/images/R8.png'),
-                 pygame.image.load('resources/images/R9.png')]
-    walkLeft = [pygame.image.load('resources/images/L1.png'), pygame.image.load('resources/images/L2.png'),
-                pygame.image.load('resources/images/L3.png'), pygame.image.load('resources/images/L4.png'),
-                pygame.image.load('resources/images/L5.png'), pygame.image.load('resources/images/L6.png'),
-                pygame.image.load('resources/images/L7.png'), pygame.image.load('resources/images/L8.png'),
-                pygame.image.load('resources/images/L9.png')]
-    bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_left.png'), (10, 10))
-    bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_right.png'), (10, 10))
+    walkRight = [pygame.image.load('resources/images/R1.png').convert_alpha(),
+                 pygame.image.load('resources/images/R2.png').convert_alpha(),
+                 pygame.image.load('resources/images/R3.png').convert_alpha(),
+                 pygame.image.load('resources/images/R4.png').convert_alpha(),
+                 pygame.image.load('resources/images/R5.png').convert_alpha(),
+                 pygame.image.load('resources/images/R6.png').convert_alpha(),
+                 pygame.image.load('resources/images/R7.png').convert_alpha(),
+                 pygame.image.load('resources/images/R8.png').convert_alpha(),
+                 pygame.image.load('resources/images/R9.png').convert_alpha()]
+    walkLeft = [pygame.image.load('resources/images/L1.png').convert_alpha(),
+                pygame.image.load('resources/images/L2.png').convert_alpha(),
+                pygame.image.load('resources/images/L3.png').convert_alpha(),
+                pygame.image.load('resources/images/L4.png').convert_alpha(),
+                pygame.image.load('resources/images/L5.png').convert_alpha(),
+                pygame.image.load('resources/images/L6.png').convert_alpha(),
+                pygame.image.load('resources/images/L7.png').convert_alpha(),
+                pygame.image.load('resources/images/L8.png').convert_alpha(),
+                pygame.image.load('resources/images/L9.png').convert_alpha()]
+    bullet_img_left = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_left.png').convert_alpha(),
+                                             (10, 10))
+    bullet_img_right = pygame.transform.scale(pygame.image.load('resources/images/bullets/bullet4_right.png').convert_alpha(),
+                                              (10, 10))
     shield_width = 50
     shield_height = 50
-    shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png'),
+    shield = pygame.transform.scale(pygame.image.load('resources/images/baff/shield.png').convert_alpha(),
                                     (shield_width, shield_height))
 
     def __init__(self, win, settings):

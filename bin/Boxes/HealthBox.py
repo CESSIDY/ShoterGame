@@ -8,7 +8,7 @@ from Projectlite import Projectile
 class HealthBox(BaseBox):
     def __init__(self, x, y, width, height, settings):
         super(HealthBox, self).__init__(x, y, width, height, settings)
-        self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/health_box.png'), (30, 30))
+        self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/health_box.png').convert(), (30, 30))
 
     def __str__(self):
         return 'health'

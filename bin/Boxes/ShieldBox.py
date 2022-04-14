@@ -9,7 +9,7 @@ from datetime import timedelta, datetime
 class ShieldBox(BaseBox):
     def __init__(self, x, y, width, height, settings):
         super(ShieldBox, self).__init__(x, y, width, height, settings)
-        self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/shield_box.png'), (30, 30))
+        self.box = pygame.transform.scale(pygame.image.load('resources/images/boxes/shield_box.png').convert(), (30, 30))
 
     def __str__(self):
         return 'shield'

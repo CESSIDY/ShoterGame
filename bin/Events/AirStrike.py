@@ -20,14 +20,14 @@ class AirStrike(BaseAttachedEven):
 
         path = 'resources/images/explosion/'
         self.fireball_imgs = [
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_0.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_1.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_2.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_3.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_4.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_5.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_6.png')), (width, height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_7.png')), (width, height))]
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_0.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_1.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_2.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_3.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_4.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_5.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_6.png')).convert_alpha(), (width, height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'fireball_7.png')).convert_alpha(), (width, height))]
 
     def draw(self, win):
         if self.fallCount + 1 >= 21:
@@ -68,20 +68,34 @@ class Explosion(BaseEven):
         base_width = 40
         base_height = 40
         self.explosion_imgs = [
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_00.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_01.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_02.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_03.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_04.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_05.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_06.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_07.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_08.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_09.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_10.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_11.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_12.png')), (base_width, base_height)),
-            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_13.png')), (base_width, base_height)), ]
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_00.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_01.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_02.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_03.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_04.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_05.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_06.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_07.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_08.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_09.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_10.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_11.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_12.png')).convert_alpha(),
+                                   (base_width, base_height)),
+            pygame.transform.scale(pygame.image.load(os.path.join(path, 'boom_13.png')).convert_alpha(),
+                                   (base_width, base_height)), ]
 
     def draw(self, win):
         if self.Count + 1 >= 26:

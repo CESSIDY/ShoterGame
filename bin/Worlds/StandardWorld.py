@@ -52,7 +52,7 @@ class StandardWorld(BaseWorld):
         self.events_generator.draw()
 
     def changeWinBg(self):
-        self.settings['bg'] = pygame.image.load('resources/images/bg.jpg')
+        self.settings['bg'] = pygame.image.load('resources/images/bg.jpg').convert()
         self.win.blit(self.settings['bg'], (0, 0))
 
     def changeWinResolution(self):
