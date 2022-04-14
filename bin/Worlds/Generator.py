@@ -35,7 +35,7 @@ class GenerateWorlds(object):
             ScreenshotWorld(self.settings, self.player, self.win, self.enemys_generator, self.box_generator,
                             self.events_generator))
 
-    def action(self, keys, event):
+    def action(self, keys, event, ai_mode=False):
         if self.activeWorld.isCloseWorld() or not self.activeWorld.isAccessWorld():
             for world in self.worlds:
                 if world.isAccessWorld() and not world.isCloseWorld():
@@ -44,8 +44,9 @@ class GenerateWorlds(object):
                     break
 
         self.activeWorld.start(keys, event)
-        #self.drawLineToObjects()
-        #self.getWorldInfo()
+        if ai_mode:
+            self.drawLineToObjects()
+            #self.getWorldInfo()
 
     def getWorldInfo(self):
         # will track the coordinates of only the first 10 boxes | [0] = type, [1] = x, [2] = y
@@ -132,10 +133,11 @@ class GenerateWorlds(object):
             pygame.draw.line(self.win, (0, 235, 70), [player_center_cordiats['x'], player_center_cordiats['y']],
                              [box.x + box.width // 2, box.y + box.height // 2], 1)
         for enemy in self.enemys_generator.enemys:
-            pygame.draw.line(self.win, (183, 0, 70), [player_center_cordiats['x'], player_center_cordiats['y']],
-                             [enemy.x + enemy.width // 2, enemy.y + enemy.height // 2], 1)
+            pygame.draw.line(self.win, (183, 0, 70), (player_center_cordiats['x'], player_center_cordiats['y']),
+                             (enemy.x + enemy.width // 2, enemy.y + enemy.height // 2), 1)
             if isinstance(enemy, BaseShotEnemy):
                 for bullet in enemy.bullets:
                     pygame.draw.line(self.win, (183, 235, 0),
                                      [player_center_cordiats['x'], player_center_cordiats['y']],
                                      [bullet.x, bullet.y], 1)
+        pygame.display.flip()

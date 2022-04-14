@@ -2,7 +2,7 @@ import pygame
 from pygame import QUIT, KEYDOWN, KEYUP, K_LEFT, K_RIGHT, K_SPACE, K_ESCAPE, MOUSEBUTTONDOWN
 from pygame.locals import *
 
-pygame.mixer.pre_init(44100, 16, 2, 4096)
+#pygame.mixer.pre_init(44100, 16, 2, 4096)
 
 pygame.init()
 ScreenWidth = 1100

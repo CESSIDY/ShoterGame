@@ -69,7 +69,7 @@ class gameWindow(object):
                 if not self.pause:
                     val_array = world.getWorldInfo()
                     self.AI_keys = nets[key].activate((val_array))
-                    world.action(self.AI_keys, self.events)
+                    world.action(self.AI_keys, self.events, ai_mode=True)
                     jumpedCount = world.player.isJumpedSomething(world.enemys_generator.enemys)
                     if jumpedCount:
                         ge[key].fitness += jumpedCount * 0.09
@@ -96,6 +96,7 @@ class gameWindow(object):
                             break
                 else:
                     self.pauseMenu()
+            del world
 
     def start(self):
         run = True
